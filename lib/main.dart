@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,13 +9,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Finance App',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.grey,
+        scaffoldBackgroundColor: Colors.lightBlueAccent,
         useMaterial3: true,
       ),
       home: HomePage(),
@@ -27,31 +28,80 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  void _updateIncome() {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
     setState(() {
-      //this is where the income will update from the 'add screen'
+      _selectedIndex = index;
     });
+  }
+
+  void _onPlusButtonPressed() {
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 173, 38, 38),
-        title: Text('MyFinanceTracker'),
-        centerTitle: true,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            IndexedStack(
+              index: _selectedIndex,
+              children: <Widget>[
+                _buildHomeContent(), 
+                _buildAnalyticsContent(), 
+                _buildSavingsContent(), 
+              ],
+            ),
+            if (_selectedIndex == 0) 
+              Positioned(
+                bottom:
+                    10, 
+                right: 185, 
+                child: FloatingActionButton(
+                  onPressed: _onPlusButtonPressed,
+                  child: Icon(Icons.add),
+                ),
+              ),
+          ],
+        ),
       ),
-      body: Column(
+      bottomNavigationBar: NavigationBar(
+        height: 60,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home Page',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.analytics),
+            selectedIcon: Icon(Icons.analytics),
+            label: 'Analytics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.savings),
+            selectedIcon: Icon(Icons.savings),
+            label: 'Savings',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return SingleChildScrollView(
+      child: Column(
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(25.0),
-            //margin: EdgeInsets.all(10.0),
-            color: Colors.grey,
-            child: Text('Current Balance:',
-                style: TextStyle(
-                    fontSize: 30.0,
-                    //backgroundColor: Colors.blue,
-                    color: Colors.amber)),
+            color: Colors.lightBlueAccent,
+            child: Text(
+              'Current Balance:',
+              style: TextStyle(fontSize: 30.0, color: Colors.amber),
+            ),
           ),
           Container(
             padding: EdgeInsets.all(15),
@@ -63,85 +113,63 @@ class _MyHomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(100),
             ),
             child: Text(
-              '\$10,000', //variable that stores balance will go here
+              '\$10,000',
               style: TextStyle(fontSize: 30),
             ),
           ),
           Container(
             padding: EdgeInsets.all(25.0),
-            //margin: EdgeInsets.all(10.0),
-            color: Colors.grey,
-            child: Text('Expenses:',
-                style: TextStyle(
-                    //decoration: TextDecoration.underline,
-                    fontSize: 30.0,
-                    //backgroundColor: Colors.blue,
-                    color: Colors.amber)),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-            color: Colors.blue,
+            color: Colors.lightBlueAccent,
             child: Text(
-              'Food: \$       ',
-              style: TextStyle(
-                  //decoration: TextDecoration.underline,
-                  fontSize: 20.0,
-                  //backgroundColor: Colors.blue,
-                  color: Colors.black),
+              'Expenses:',
+              style: TextStyle(fontSize: 30.0, color: Colors.amber),
             ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-            color: Colors.blue,
-            child: Text(
-              'Rent: \$       ',
-              style: TextStyle(
-                  //decoration: TextDecoration.underline,
-                  fontSize: 20.0,
-                  //backgroundColor: Colors.blue,
-                  color: Colors.black),
-            ),
+          ListView(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              _buildExpenseItem('Food'),
+              _buildExpenseItem('Rent'),
+              _buildExpenseItem('Utilities'),
+              _buildExpenseItem('Leisure/Entertainment'),
+            ],
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-            color: Colors.blue,
-            child: Text(
-              'Utilities: \$    ',
-              style: TextStyle(
-                  //decoration: TextDecoration.underline,
-                  fontSize: 20.0,
-                  //backgroundColor: Colors.blue,
-                  color: Colors.black),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-            color: Colors.blue,
-            child: Text(
-              'Leisure/Entertainment:  \$    ',
-              style: TextStyle(
-                  //decoration: TextDecoration.underline,
-                  fontSize: 20.0,
-                  //backgroundColor: Colors.blue,
-                  color: Colors.black),
-            ),
-          ),
+          SizedBox(height: 20),
         ],
       ),
-      bottomNavigationBar: NavigationBar(height: 60, destinations: [
-        NavigationDestination(
-            icon: Icon(Icons.home),
-            selectedIcon: Icon(Icons.home),
-            label: 'home page'),
-        NavigationDestination(
-            icon: Icon(Icons.analytics),
-            selectedIcon: Icon(Icons.analytics),
-            label: 'Analytics'),
-        NavigationDestination(
-            icon: Icon(Icons.savings),
-            selectedIcon: Icon(Icons.savings),
-            label: 'Savings'),
-      ]),
+    );
+  }
+
+  Widget _buildAnalyticsContent() {
+    return Center(
+      child: Text(
+        'Analytics Tab',
+        style: TextStyle(fontSize: 24),
+      ),
+    );
+  }
+
+  Widget _buildSavingsContent() {
+    return Center(
+      child: Text(
+        'Savings Tab',
+        style: TextStyle(fontSize: 24),
+      ),
+    );
+  }
+
+  Widget _buildExpenseItem(String label) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+      color: Colors.blue,
+      child: Center(
+        child: Text(
+          '$label: \$       ',
+          style: TextStyle(fontSize: 20.0, color: Colors.black),
+        ),
+      ),
     );
   }
 }
+
