@@ -128,6 +128,20 @@ class _MyHomePageState extends State<HomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: NavigationBar(height: 60, destinations: [
+        NavigationDestination(
+            icon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home),
+            label: 'home page'),
+        NavigationDestination(
+            icon: Icon(Icons.analytics),
+            selectedIcon: Icon(Icons.analytics),
+            label: 'Analytics'),
+        NavigationDestination(
+            icon: Icon(Icons.savings),
+            selectedIcon: Icon(Icons.savings),
+            label: 'Savings'),
+      ]),
     );
   }
 }
