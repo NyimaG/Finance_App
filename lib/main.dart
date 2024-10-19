@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'addExpenses.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +38,10 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void _onPlusButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddExpensePage()),
+    );
   }
 
   @override
@@ -48,16 +53,15 @@ class _MyHomePageState extends State<HomePage> {
             IndexedStack(
               index: _selectedIndex,
               children: <Widget>[
-                _buildHomeContent(), 
-                _buildAnalyticsContent(), 
-                _buildSavingsContent(), 
+                _buildHomeContent(),
+                _buildAnalyticsContent(),
+                _buildSavingsContent(),
               ],
             ),
-            if (_selectedIndex == 0) 
+            if (_selectedIndex == 0)
               Positioned(
-                bottom:
-                    10, 
-                right: 185, 
+                bottom: 10,
+                right: 185,
                 child: FloatingActionButton(
                   onPressed: _onPlusButtonPressed,
                   child: Icon(Icons.add),
