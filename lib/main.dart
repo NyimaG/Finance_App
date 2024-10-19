@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'addExpenses.dart'; 
+import 'addExpenses.dart';
+import 'expense.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -176,4 +177,3 @@ class _MyHomePageState extends State<HomePage> {
     );
   }
 }
-
