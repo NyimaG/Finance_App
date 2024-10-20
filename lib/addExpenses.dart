@@ -91,8 +91,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       amount: amount,
                       description: description,
                       category: category,
-                      isIncome: category ==
-                          'Income', 
+                      isIncome: category == 'Income',
                     );
                     Navigator.of(context).pop(newExpense);
                   }

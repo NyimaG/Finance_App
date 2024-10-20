@@ -1,28 +1,6 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'addExpenses.dart';
-import 'expense.dart'; 
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Personal Finance App',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.lightBlueAccent,
-        useMaterial3: true,
-      ),
-      home: HomePage(),
-    );
-  }
-}
+import 'expense.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,6 +9,8 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  List<Expense> expenses = [];
+  double currentBalance = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -38,11 +18,20 @@ class _MyHomePageState extends State<HomePage> {
     });
   }
 
-  void _onPlusButtonPressed() {
-    Navigator.push(
-      context,
+  void _onPlusButtonPressed() async {
+    final newExpense = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => AddExpensePage()),
     );
+    if (newExpense != null) {
+      setState(() {
+        expenses.add(newExpense);
+        if (newExpense.isIncome) {
+          currentBalance += double.parse(newExpense.amount);
+        } else {
+          currentBalance -= double.parse(newExpense.amount);
+        }
+      });
+    }
   }
 
   @override
@@ -104,22 +93,8 @@ class _MyHomePageState extends State<HomePage> {
             padding: EdgeInsets.all(25.0),
             color: Colors.lightBlueAccent,
             child: Text(
-              'Current Balance:',
+              'Current Balance: \$${currentBalance.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 30.0, color: Colors.amber),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black,
-                width: 3,
-              ),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Text(
-              '\$10,000',
-              style: TextStyle(fontSize: 30),
             ),
           ),
           Container(
@@ -130,19 +105,39 @@ class _MyHomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 30.0, color: Colors.amber),
             ),
           ),
-          ListView(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              _buildExpenseItem('Food'),
-              _buildExpenseItem('Rent'),
-              _buildExpenseItem('Utilities'),
-              _buildExpenseItem('Leisure/Entertainment'),
-            ],
-          ),
+          _buildExpenseList('Food', expenses),
+          _buildExpenseList('Rent', expenses),
+          _buildExpenseList('Utilities', expenses),
+          _buildExpenseList('Leisure/Entertainment', expenses),
+          _buildExpenseList('Income', expenses),
           SizedBox(height: 20),
         ],
       ),
+    );
+  }
+
+  Widget _buildExpenseList(String categoryLabel, List<Expense> expenses) {
+    List<Expense> filteredExpenses =
+        expenses.where((expense) => expense.category == categoryLabel).toList();
+
+    return Column(
+      children: [
+        Text(
+          categoryLabel,
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: filteredExpenses.length,
+          itemBuilder: (context, index) {
+            final expense = filteredExpenses[index];
+            return ListTile(
+              title: Text('${expense.description}: \$${expense.amount}'),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -160,19 +155,6 @@ class _MyHomePageState extends State<HomePage> {
       child: Text(
         'Savings Tab',
         style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-
-  Widget _buildExpenseItem(String label) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-      color: Colors.blue,
-      child: Center(
-        child: Text(
-          '$label: \$       ',
-          style: TextStyle(fontSize: 20.0, color: Colors.black),
-        ),
       ),
     );
   }
