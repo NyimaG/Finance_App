@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'addExpenses.dart'; 
+import 'package:project1/savings.dart';
+import 'addExpenses.dart';
+import 'savingclass.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +57,8 @@ class _MyHomePageState extends State<HomePage> {
               children: <Widget>[
                 _buildHomeContent(),
                 _buildAnalyticsContent(),
-                _buildSavingsContent(),
+                SavingsApp(),
+                //_buildSavingsContent(),
               ],
             ),
             if (_selectedIndex == 0)
@@ -176,4 +179,3 @@ class _MyHomePageState extends State<HomePage> {
     );
   }
 }
-
