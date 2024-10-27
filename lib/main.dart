@@ -179,17 +179,34 @@ class _MyHomePageState extends State<HomePage> {
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                categoryLabel,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    categoryLabel,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '${expense.description[0].toUpperCase()}${expense.description.substring(1).toLowerCase()}: \$${expense.amount}',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                '${expense.description[0].toUpperCase()}${expense.description.substring(1).toLowerCase()}: \$${expense.amount}',
-                style: TextStyle(fontSize: 18),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.black),
+                onPressed: () async {
+                  setState(() {
+                    expenses.remove(expense);
+                    currentBalance += expense.isIncome
+                        ? -double.parse(expense.amount)
+                        : double.parse(expense.amount);
+                  });
+                  await DatabaseHelper.instance.deleteExpense(expense.id);
+                },
               ),
             ],
           ),

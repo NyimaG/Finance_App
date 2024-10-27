@@ -54,4 +54,14 @@ class DatabaseHelper {
     final db = await instance.database;
     db.close();
   }
+
+  Future<void> deleteExpense(int? id) async {
+    if (id == null) return;
+    final db = await instance.database;
+    await db.delete(
+      'expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }
