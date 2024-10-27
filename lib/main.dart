@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:project1/savings.dart';
 import 'addExpenses.dart';
 //import 'savingclass.dart';
-import 'addExpenses.dart';
 import 'expense.dart';
+import 'analytics.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -65,7 +66,7 @@ class _MyHomePageState extends State<HomePage> {
               index: _selectedIndex,
               children: <Widget>[
                 _buildHomeContent(),
-                _buildAnalyticsContent(),
+                AnalyticsPage(expenses: expenses),
                 SavingsApp(),
                 //_buildSavingsContent(),
               ],
