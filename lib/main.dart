@@ -62,7 +62,9 @@ class _MyHomePageState extends State<HomePage> {
 
   void _onPlusButtonPressed() async {
     final newExpense = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AddExpensePage()),
+      MaterialPageRoute(
+        builder: (context) => AddExpensePage(currentBalance: currentBalance),
+      ),
     );
     if (newExpense != null) {
       setState(() {
