@@ -131,7 +131,6 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeContent() {
-    // Display expenses in various categories
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[

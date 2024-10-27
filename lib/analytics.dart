@@ -16,67 +16,76 @@ class AnalyticsPage extends StatelessWidget {
               double.parse(expense.amount);
     }
 
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
             Text(
               'Total Spendings',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 30.0, color: Colors.white),
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  barGroups: categoryTotals.entries.map((entry) {
-                    return BarChartGroupData(
-                      x: categoryTotals.keys.toList().indexOf(entry.key),
-                      barRods: [
-                        BarChartRodData(
-                          toY: entry.value,
-                          color: Colors.blue,
-                          width: 15,
+            SizedBox(height: 60),
+            Container(
+              height: screenHeight / 2.5,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.white,
+                  width: 3.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: BarChart(
+                  BarChartData(
+                      alignment: BarChartAlignment.spaceAround,
+                      barGroups: categoryTotals.entries.map((entry) {
+                        return BarChartGroupData(
+                          x: categoryTotals.keys.toList().indexOf(entry.key),
+                          barRods: [
+                            BarChartRodData(
+                              toY: entry.value,
+                              color: Colors.blue,
+                              width: 15,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ],
+                          showingTooltipIndicators: [0],
+                        );
+                      }).toList(),
+                      titlesData: FlTitlesData(
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (index, _) {
+                              final category =
+                                  categoryTotals.keys.elementAt(index.toInt());
+                              return Text(category,
+                                  style: TextStyle(fontSize: 12));
+                            },
+                          ),
                         ),
-                      ],
-                      showingTooltipIndicators: [0],
-                    );
-                  }).toList(),
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (index, _) {
-                          final category =
-                              categoryTotals.keys.elementAt(index.toInt());
-                          return Text(category, style: TextStyle(fontSize: 12));
-                        },
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                       ),
-                    ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: false,
-                      ),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: false,
-                      ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        interval: 50,
-                        getTitlesWidget: (value, _) {
-                          return Text('\$${value.toStringAsFixed(0)}');
-                        },
-                      ),
-                    ),
-                  ),
-                  gridData: FlGridData(show: false),
-                  borderData: FlBorderData(show: false),
+                      gridData: FlGridData(show: false),
+                      borderData: FlBorderData(show: false),
+                      barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                        fitInsideHorizontally: true,
+                        fitInsideVertically: true,
+                        tooltipMargin: 10,
+                      ))),
                 ),
               ),
             ),
