@@ -63,6 +63,7 @@ class _SavingsHomeState extends State<SavingsHome> {
         onPressed: () => _showAddGoalDialog(),
         child: Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

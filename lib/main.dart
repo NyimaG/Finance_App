@@ -186,7 +186,7 @@ class _MyHomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSavingsContent() {
+  /*Widget _buildSavingsContent() {
     return Center(
       child: Text(
         'Savings Tab',
@@ -194,4 +194,5 @@ class _MyHomePageState extends State<HomePage> {
       ),
     );
   }
+  */
 }
