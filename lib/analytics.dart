@@ -61,7 +61,7 @@ class AnalyticsPage extends StatelessWidget {
                     ),
                     topTitles: AxisTitles(
                       sideTitles: SideTitles(
-                        showTitles: false, 
+                        showTitles: false,
                       ),
                     ),
                     leftTitles: AxisTitles(
@@ -86,4 +86,3 @@ class AnalyticsPage extends StatelessWidget {
     );
   }
 }
-

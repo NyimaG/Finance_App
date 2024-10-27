@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:project1/savings.dart';
 import 'addExpenses.dart';
-//import 'savingclass.dart';
 import 'expense.dart';
 import 'analytics.dart';
+import 'database_helper.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +33,26 @@ class _MyHomePageState extends State<HomePage> {
   List<Expense> expenses = [];
   double currentBalance = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadExpenses();
+  }
+
+  Future<void> _loadExpenses() async {
+    final loadedExpenses = await DatabaseHelper.instance.getAllExpenses();
+    double balance = 0;
+    for (var expense in loadedExpenses) {
+      balance += expense.isIncome
+          ? double.parse(expense.amount)
+          : -double.parse(expense.amount);
+    }
+    setState(() {
+      expenses = loadedExpenses;
+      currentBalance = balance;
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -52,6 +72,7 @@ class _MyHomePageState extends State<HomePage> {
           currentBalance -= double.parse(newExpense.amount);
         }
       });
+      await DatabaseHelper.instance.insertExpense(newExpense);
     }
   }
 
@@ -67,7 +88,6 @@ class _MyHomePageState extends State<HomePage> {
                 _buildHomeContent(),
                 AnalyticsPage(expenses: expenses),
                 SavingsApp(),
-                //_buildSavingsContent(),
               ],
             ),
             if (_selectedIndex == 0)
@@ -110,6 +130,7 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeContent() {
+    // Display expenses in various categories
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -174,15 +195,6 @@ class _MyHomePageState extends State<HomePage> {
           ),
         );
       }).toList(),
-    );
-  }
-
-  Widget _buildAnalyticsContent() {
-    return Center(
-      child: Text(
-        'Analytics Tab',
-        style: TextStyle(fontSize: 24),
-      ),
     );
   }
 }
