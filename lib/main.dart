@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:project1/savings.dart';
 import 'addExpenses.dart';
 //import 'savingclass.dart';
-import 'addExpenses.dart';
 import 'expense.dart';
+import 'analytics.dart';
 
 void main() => runApp(MyApp());
 
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<HomePage> {
               index: _selectedIndex,
               children: <Widget>[
                 _buildHomeContent(),
-                _buildAnalyticsContent(),
+                AnalyticsPage(expenses: expenses),
                 SavingsApp(),
                 //_buildSavingsContent(),
               ],
@@ -181,15 +181,6 @@ class _MyHomePageState extends State<HomePage> {
     return Center(
       child: Text(
         'Analytics Tab',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-
-  Widget _buildSavingsContent() {
-    return Center(
-      child: Text(
-        'Savings Tab',
         style: TextStyle(fontSize: 24),
       ),
     );
