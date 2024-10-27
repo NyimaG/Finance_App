@@ -11,6 +11,7 @@ class SavingsApp extends StatelessWidget {
     return MaterialApp(
       title: 'Savings App',
       home: SavingsHome(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -35,24 +36,52 @@ class _SavingsHomeState extends State<SavingsHome> {
     });
   }
 
+  void _deletegoal(int index) {
+    setState(() {
+      goals.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Savings Goals')),
+      backgroundColor: Colors.grey[400],
+      appBar: AppBar(
+        title: Text('Savings Tracker',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            )),
+        backgroundColor: Colors.green,
+      ),
       body: ListView.builder(
           itemCount: goals.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text(goals[index].name),
+              title: Text(
+                goals[index].name,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      'Saved: \$${goals[index].savedAmount} of \$${goals[index].targetAmount}'),
+                      'Saved: \$${goals[index].savedAmount} of \$${goals[index].targetAmount}',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   LinearProgressIndicator(
                     value: goals[index].progress,
-                    backgroundColor: Colors.grey[300],
-                    color: Colors.blue,
+                    backgroundColor: Colors.red,
+                    valueColor: AlwaysStoppedAnimation(Colors.green),
+                    //color: Colors.green,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      size: 20.0,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => _deletegoal(index),
                   ),
                 ],
               ),
@@ -61,8 +90,12 @@ class _SavingsHomeState extends State<SavingsHome> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddGoalDialog(),
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          //color: Colors.red,
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
