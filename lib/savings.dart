@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'savingclass.dart';
+import 'savings_database.dart';
+
+final dbHelper = DatabaseHelper();
 
 void main() {
   runApp(SavingsApp());
@@ -24,13 +27,29 @@ class SavingsHome extends StatefulWidget {
 class _SavingsHomeState extends State<SavingsHome> {
   List<SavingsGoal> goals = [];
 
-  void _addGoal(SavingsGoal goal) {
+  @override
+  void initState() {
+    super.initState();
+    _loadGoals(); // Load goals when the app starts
+  }
+
+  void _loadGoals() async {
+    final loadedGoals =
+        await dbHelper.getGoals(); // Get saved goals from database
+    setState(() {
+      goals = loadedGoals; // Update the in-memory list
+    });
+  }
+
+  void _addGoal(SavingsGoal goal) async {
+    await dbHelper.saveGoal(goal);
     setState(() {
       goals.add(goal);
     });
   }
 
-  void _editGoal(int index, SavingsGoal goal) {
+  void _editGoal(int index, SavingsGoal goal) async {
+    await dbHelper.saveGoal(goal);
     setState(() {
       goals[index] = goal;
     });
@@ -52,7 +71,7 @@ class _SavingsHomeState extends State<SavingsHome> {
               fontSize: 24,
               fontWeight: FontWeight.bold,
             )),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
           itemCount: goals.length,
@@ -75,6 +94,15 @@ class _SavingsHomeState extends State<SavingsHome> {
                     valueColor: AlwaysStoppedAnimation(Colors.green),
                     //color: Colors.green,
                   ),
+                  /*IconButton(
+                    icon: Icon(
+                      Icons.save,
+                      size: 20.0,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => dbHelper.saveSettings(goals[index].name,
+                        goals[index].targetAmount, goals[index].savedAmount),
+                  ),*/
                   IconButton(
                     icon: Icon(
                       Icons.delete,
