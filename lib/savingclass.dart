@@ -11,7 +11,7 @@ class SavingsGoal {
     required this.savedAmount,
   });
 
-  // Convert a SavingsGoal into a Map. The keys must match the column names in SQLite.
+  // Convert a SavingsGoal into a Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,

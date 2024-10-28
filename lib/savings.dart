@@ -56,7 +56,8 @@ class _SavingsHomeState extends State<SavingsHome> {
   }
 
   void _deletegoal(int index) async {
-    await dbHelper.deleteGoal(index);
+    int goalId = goals[index].id!;
+    await dbHelper.deleteGoal(goalId);
     setState(() {
       goals.removeAt(index);
     });
