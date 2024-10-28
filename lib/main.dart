@@ -216,13 +216,4 @@ class _MyHomePageState extends State<HomePage> {
       }).toList(),
     );
   }
-
-  Widget _buildAnalyticsContent() {
-    return Center(
-      child: Text(
-        'Analytics Tab',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
 }
