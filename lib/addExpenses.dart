@@ -1,8 +1,13 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'expense.dart';
 
 class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({Key? key}) : super(key: key);
+  final double currentBalance;
+
+  const AddExpensePage({Key? key, required this.currentBalance})
+      : super(key: key);
 
   @override
   _AddExpensePageState createState() => _AddExpensePageState();
@@ -12,6 +17,51 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String? selectedCategory;
+
+  void _addExpense() {
+    final amountText = amountController.text;
+    final description = descriptionController.text;
+    final category = selectedCategory;
+
+    if (amountText.isNotEmpty && description.isNotEmpty && category != null) {
+      final amount = double.tryParse(amountText);
+
+      if (amount == null) {
+        _showError('Please enter a valid number for the amount.');
+        return;
+      }
+
+      if (category != 'Income' && widget.currentBalance - amount < 0) {
+        _showError('This expense will result in a negative balance.');
+        return;
+      }
+
+      final newExpense = Expense(
+        amount: amountText,
+        description: description,
+        category: category,
+        isIncome: category == 'Income',
+      );
+
+      Navigator.of(context).pop(newExpense);
+    }
+  }
+
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,26 +101,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   border: OutlineInputBorder(),
                 ),
                 items: [
+                  DropdownMenuItem(value: 'Income', child: Text('Income')),
+                  DropdownMenuItem(value: 'Food', child: Text('Food')),
+                  DropdownMenuItem(value: 'Rent', child: Text('Rent')),
                   DropdownMenuItem(
-                    value: 'Income',
-                    child: Text('Income'),
-                  ),
+                      value: 'Utilities', child: Text('Utilities')),
                   DropdownMenuItem(
-                    value: 'Food',
-                    child: Text('Food'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Rent',
-                    child: Text('Rent'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Utilities',
-                    child: Text('Utilities'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Leisure/Entertainment',
-                    child: Text('Leisure/Entertainment'),
-                  ),
+                      value: 'Leisure/Entertainment',
+                      child: Text('Leisure/Entertainment')),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -80,22 +118,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  final amount = amountController.text;
-                  final description = descriptionController.text;
-                  final category = selectedCategory;
-                  if (amount.isNotEmpty &&
-                      description.isNotEmpty &&
-                      category != null) {
-                    final newExpense = Expense(
-                      amount: amount,
-                      description: description,
-                      category: category,
-                      isIncome: category == 'Income',
-                    );
-                    Navigator.of(context).pop(newExpense);
-                  }
-                },
+                onPressed: _addExpense,
                 child: Text('Add'),
               ),
               SizedBox(height: 20),

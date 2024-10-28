@@ -11,9 +11,11 @@ class AnalyticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, double> categoryTotals = {};
     for (var expense in expenses) {
-      categoryTotals[expense.category] =
-          (categoryTotals[expense.category] ?? 0) +
-              double.parse(expense.amount);
+      if (!expense.isIncome) {
+        categoryTotals[expense.category] =
+            (categoryTotals[expense.category] ?? 0) +
+                double.parse(expense.amount);
+      }
     }
 
     double maxValue = categoryTotals.values.isNotEmpty
@@ -60,7 +62,7 @@ class AnalyticsPage extends StatelessWidget {
                         barRods: [
                           BarChartRodData(
                             toY: entry.value,
-                            color: Colors.blue,
+                            color: const Color.fromARGB(255, 91, 178, 221),
                             width: 15,
                             borderRadius: BorderRadius.circular(4),
                           ),
