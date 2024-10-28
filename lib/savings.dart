@@ -67,12 +67,19 @@ class _SavingsHomeState extends State<SavingsHome> {
     return Scaffold(
       backgroundColor: Colors.grey[400],
       appBar: AppBar(
-        title: Text('Savings Tracker',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            )),
-        backgroundColor: Colors.white,
+        title: Container(
+          padding: EdgeInsets.all(24.0), // This will move the title down
+          child: Center(
+            child: Text(
+              'Savings Tracker',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+              ),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.grey[400],
       ),
       body: ListView.builder(
           itemCount: goals.length,
